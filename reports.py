@@ -2,52 +2,77 @@
 # Report functions
 
 def count_games(file_name):
+    '''Check how many lines is in the file, indicating number of games.'''
     with open(file_name, 'r') as input_list:
         return len(input_list.readlines())
 
+
+
 def decide(file_name, year):
-    with open(file_name, 'r') as input_list:
-        for i in input_list:
-            if str(year) in i:
-                return True
+    '''Check if there is a game from a specific year in the file.'''
+    games_list = list_of_elements(file_name)
+    is_found = 0
+    for i in range(len(games_list)):
+        if str(year) == games_list[i][2]:
+            is_found = 1
+            return True
+    if is_found == 0:
+        return 'No title found'
+
+
 
 def get_latest(file_name):
-    listed_games = list_of_elements(file_name)
+    '''Search for a latest game in the file, return the one found first.'''
+    games_list = list_of_elements(file_name)
     game_number = 0
     iteration = 0
     top_year = 0
-    for i in range(len(listed_games)):
-        if int(listed_games[i][2]) > top_year:
+    for i in range(len(games_list)):
+        if int(games_list[i][2]) > top_year:
             game_number = iteration
-            top_year = int(listed_games[i][2])
+            top_year = int(games_list[i][2])
             iteration += 1
         else:
             iteration += 1
-    return listed_games[game_number][0]
+    return games_list[game_number][0]
+
+
 
 def count_by_genre(file_name, genre):
+    '''Check how many games in given genre are in the file.'''
+    games_list = list_of_elements(file_name)
     total_games_in_genre = 0
-    with open(file_name, 'r') as input_list:
-        for i in input_list:
-            if genre in i:
-                total_games_in_genre += 1
+    for i in range(len(games_list)):
+        if str(genre) == games_list[i][3]:    
+            total_games_in_genre += 1
+    if total_games_in_genre > 0:        
         return total_games_in_genre
+    else:
+        return '0'
+
+
 
 def get_line_number_by_title(file_name, title):
+    '''Search for a specific title in the file, and return it's line number.'''
+    games_list = list_of_elements(file_name)
     line_number = 1
-    with open(file_name, 'r') as input_list:
-        try:
-            for i in input_list:
-                if str(title) in i:
-                    return line_number
-                else:
-                    line_number += 1
-            if line_number == 1:
-                raise ValueError
-        except ValueError:
-            return('No title found.')
+    is_found = 0
+    try:
+        for i in range(len(games_list)):
+            if title == games_list[i][0]:
+                is_found = 1
+                return line_number
+            else:
+                line_number += 1
+        if is_found == 0:
+            raise ValueError
+    except ValueError:
+        return 'No title found'
+
+
 
 def list_of_elements(file_name):
+    '''Read data from a file, and save it as a list easily readible for functions.'''
     with open(file_name, 'r') as file:
         how_long_is_list = len(file.readlines())
         file.seek(0)
@@ -66,7 +91,10 @@ def list_of_elements(file_name):
                 final_list_of_games.append(j.split(', '))
         return final_list_of_games
 
+
+
 def get_genres(file_name):
+    '''Return list of all genres in the list, without duplicates.'''
     games_list = list_of_elements(file_name)
     genres_list = []
     for i in range(len(games_list)):
@@ -77,6 +105,7 @@ def get_genres(file_name):
     return sorted(genres_list)
 
 def when_was_top_sold_fps(file_name):
+    '''Check what was the release year of the top sold "First-person shooter game".'''
     games_list = list_of_elements(file_name)
     year_top_sold = 0
     sales = 0
