@@ -13,7 +13,7 @@ def decide(file_name, year):
     games_list = list_of_elements(file_name)
     is_found = 0
     for i in range(len(games_list)):
-        if str(year) == games_list[i][2]:
+        if year == games_list[i][2]:
             is_found = 1
             return True
     if is_found == 0:
@@ -28,9 +28,9 @@ def get_latest(file_name):
     iteration = 0
     top_year = 0
     for i in range(len(games_list)):
-        if int(games_list[i][2]) > top_year:
+        if games_list[i][2] > top_year:
             game_number = iteration
-            top_year = int(games_list[i][2])
+            top_year = games_list[i][2]
             iteration += 1
         else:
             iteration += 1
@@ -89,6 +89,9 @@ def list_of_elements(file_name):
         for i in clean_list_of_games:
             for j in i:
                 final_list_of_games.append(j.split(', '))
+        for i in range(len(final_list_of_games)):
+            final_list_of_games[i][1] = float(final_list_of_games[i][1])
+            final_list_of_games[i][2] = int(final_list_of_games[i][2])
         return final_list_of_games
 
 
@@ -111,7 +114,7 @@ def when_was_top_sold_fps(file_name):
     sales = 0
     for i in range(len(games_list)):
         if games_list[i][3] == 'First-person shooter':
-            if float(games_list[i][1]) > sales:
-                sales = float(games_list[i][1])
-                year_top_sold = int(games_list[i][2])
+            if games_list[i][1] > sales:
+                sales = games_list[i][1]
+                year_top_sold = games_list[i][2]
     return year_top_sold
